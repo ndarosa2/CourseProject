@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <script src="compromise.js"></script>
+  
+  <!-- source of compendium library https://github.com/Ulflander/compendium-js-->
+  <script src="compendium.minimal.js"></script>  
+  <title>Sentiment Score</title>
+  <head>
+    <title>Sentiment Score</title>
+    <link rel="stylesheet" href="converter.css" />
+  </head>
+  <body>
+    <h1>Text Sentiment Score</h1>
+
+    Paste copied text into box below (max of 400 characters)
+    <br />
+    <br />
+    <textarea name="text" id= "text_input" name ="value_input" cols="80" rows="5" maxlength="400" onchange="analyseText()"></textarea>
+    <br />
+    <p id="sentiment_score_label" >Sentiment Score: </p>
+    <br />
+    <p id="text_POS_tags" ></p>
+
+    <br />
+    <br />
+    <table id="token_table">
+     <tr>
+       <th>Token</th>
+       <th>Stem</th>
+       <th>POS</th>
+     </tr>
+    </table>
+  
+    <script>
+      function analyseText() {
+        //const text_analysed_array = compendium.analyse('Nick is having a bad day. I hate oreos');
+        const text = document.getElementById("text_input").value;
+        const text_replaced = text.replaceAll(/[?!.]/g," ");
+        // analyse the text but dont process for numeric and negation functions. 
+        //const text_analysed_array = compendium.analyse(document.getElementById("text_input").value, null, ['numeric','negation']);
+        const text_analysed_array = compendium.analyse(text_replaced, null, ['numeric','negation']);
+        const tags_array = text_analysed_array[0].tags;
+        const tokens_array =  text_analysed_array[0].tokens;
+        const sentiment_score = text_analysed_array[0].profile.sentiment;
+        const sentiment_label = text_analysed_array[0].profile.label;
+        const tense = text_analysed_array[0].profile.main_tense;
+        document.getElementById("sentiment_score_label").innerHTML = "Sentiment Score: " + sentiment_score + "  Sentiment Label: " + sentiment_label;
+        document.getElementById("text_POS_tags").innerHTML = "Text with POS tags: " + text_replaced;
+        console.log("test")  
+        console.log(text_analysed_array[0]);  
+        console.log(tags_array);
+        
+        createTable(tokens_array,tags_array); 
+      
+      }
+      function createTable(tokens_array,tags_array){ // implementation based on https://www.itgeared.com/how-to-create-dynamic-html-table-javascript/
+
+         //var div1 = document.getElementById('div1');
+                                              
+         var tbl = document.getElementById("token_table");
+         tbl.innerHTML = ""; 
+         var row = document.createElement("tr");
+         var tbl_header = document.createElement("th");
+         tbl_header.innerHTML = "Token";
+         row.appendChild(tbl_header);
+         tbl_header = document.createElement("th");
+         tbl_header.innerHTML = "Stem";
+         row.appendChild(tbl_header);
+         tbl_header = document.createElement("th");
+         tbl_header.innerHTML = "POS";
+         row.appendChild(tbl_header);
+         tbl.appendChild(row); // add the row
+      
+         for (var i = 0; i < tokens_array.length; i++) {
+            var row = document.createElement("tr");
+            var cell = document.createElement("td");
+            cell.innerHTML = tokens_array[i].raw;
+            row.appendChild(cell);
+                                                 
+            cell = document.createElement("td");
+            cell.innerHTML = tokens_array[i].stem;
+            row.appendChild(cell);
+                                                 
+            cell = document.createElement("td");
+            cell.innerHTML = tags_array[i];
+            row.appendChild(cell);
+                
+	          tbl.appendChild(row); // add the row
+         }                                                                                                            
+     }
+    </script>
+    <script>
+      function copyText() {
+        // Based on implementation found here: https://www.w3schools.com/howto/howto_js_copy_clipboard.asp
+        var outputText = document.getElementById("value_output");
+        outputText.select();
+        outputText.setSelectionRange(0, 99999); /* For mobile devices */
+        navigator.clipboard.writeText(outputText.value);
+      }
+      // 
+    </script>
+  </body>
+</html>
+
+
