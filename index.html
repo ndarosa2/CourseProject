@@ -8,30 +8,31 @@
   
   <!-- source of compendium library https://github.com/Ulflander/compendium-js-->
   <script src="compendium.minimal.js"></script>  
-  <title>Sentiment Score</title>
+  <title>Text NLP Analysis</title>
   <head>
-    <title>Sentiment Score</title>
+    <title>Text NLP Analysis</title>
     <link rel="stylesheet" href="converter.css" />
   </head>
   <body>
-    <h1>Text Sentiment Score</h1>
+    <h1>Text NLP Analysis</h1>
 
     Paste copied text into box below (max of 400 characters)
-    <br />
     <br />
     <textarea name="text" id= "text_input" name ="value_input" cols="80" rows="5" maxlength="400" onchange="analyseText()"></textarea>
     <br />
     <p id="sentiment_score_label" >Sentiment Score: </p>
     <br />
-    <p id="text_POS_tags" ></p>
+    <p><b>Entity Recognition</b></p>
+    <p id="people" >People: </p>
+    <p id="places" >Places: </p>
+    <p id="organizations" >Organizations: </p>
 
-    <br />
     <br />
     <table id="token_table">
      <tr>
        <th>Token</th>
        <th>Stem</th>
-       <th>POS</th>
+       <th>Part of Speech</th>
      </tr>
     </table>
   
@@ -39,7 +40,7 @@
       function analyseText() {
         //const text_analysed_array = compendium.analyse('Nick is having a bad day. I hate oreos');
         const text = document.getElementById("text_input").value;
-        const text_replaced = text.replaceAll(/[?!.]/g," ");
+        const text_replaced = text.replaceAll(/[?!.,()#]/g," ");
         // analyse the text but dont process for numeric and negation functions. 
         //const text_analysed_array = compendium.analyse(document.getElementById("text_input").value, null, ['numeric','negation']);
         const text_analysed_array = compendium.analyse(text_replaced, null, ['numeric','negation']);
@@ -49,13 +50,13 @@
         const sentiment_label = text_analysed_array[0].profile.label;
         const tense = text_analysed_array[0].profile.main_tense;
         document.getElementById("sentiment_score_label").innerHTML = "Sentiment Score: " + sentiment_score + "  Sentiment Label: " + sentiment_label;
-        document.getElementById("text_POS_tags").innerHTML = "Text with POS tags: " + text_replaced;
         console.log("test")  
         console.log(text_analysed_array[0]);  
         console.log(tags_array);
         
         createTable(tokens_array,tags_array); 
       // https://observablehq.com/@spencermountain/topics-named-entity-recognition
+        /*
         var arr = nlp(text_replaced).organizations();
         console.log("compromise test")
         console.log(arr.list);
@@ -69,7 +70,49 @@
           console.log(topic);                            
         } 
         //console.log(arr.list);
+        */
+        var people = getEntities("people",text_replaced);
+        document.getElementById("people").innerHTML = "People: " + people;
+        var places = getEntities("places",text_replaced);
+        document.getElementById("places").innerHTML = "Places: " + places;      
+        var organizations = getEntities("organizations",text_replaced);
+        document.getElementById("organizations").innerHTML = "Organizations: " + organizations;
+      }
       
+      function getEntities(type,input_text){
+        var entities_string = "";
+        if (type == "places"){
+            entities_object = nlp(input_text).places().list;
+      
+        }
+        else if (type == "organizations"){
+            entities_object = nlp(input_text).organizations().list;
+      
+        }
+        else if (type == "people"){
+            entities_object = nlp(input_text).people().list;
+        }
+        else {
+            entities_object = nlp(input_text).topics().list;
+        }
+        //const entities_array = [];
+        for (var i=0; i < entities_object.length ; i++){
+          var entities_terms = entities_object[i].cache.terms;
+          var entity = entities_terms[0].text;
+            for (var j=1; j < entities_terms.length ; j++){
+              entity = entity +" "+ entities_terms[j].text;
+            }
+          
+          if(i==0){
+            entities_string = entity;
+          }
+          else{
+            entities_string= entities_string + ", "+ entity;
+      
+          }                       
+        } 
+        return entities_string;
+
       }
       
       function createTable(tokens_array,tags_array){ // implementation based on https://www.itgeared.com/how-to-create-dynamic-html-table-javascript/
@@ -86,7 +129,7 @@
          tbl_header.innerHTML = "Stem";
          row.appendChild(tbl_header);
          tbl_header = document.createElement("th");
-         tbl_header.innerHTML = "POS";
+         tbl_header.innerHTML = "Part of Speech";
          row.appendChild(tbl_header);
          tbl.appendChild(row); // add the row
       
@@ -101,12 +144,58 @@
             row.appendChild(cell);
                                                  
             cell = document.createElement("td");
-            cell.innerHTML = tags_array[i];
+            if (tags_array[i] in POS_object){
+              cell.innerHTML = POS_object[tags_array[i]];        
+                                                 
+            }
+            else {
+              cell.innerHTML = tags_array[i];                                                 
+            }
+
             row.appendChild(cell);
                 
 	          tbl.appendChild(row); // add the row
          }                                                                                                            
      }
+                                                 
+     const POS_object = {
+      CC: "Coord Conjunction",         
+      CD: "Cardinal number",         
+      DT: "Determiner",              
+      EX: "Existential there",       
+      FW: "Foreign word",             
+      IN: "Preposition",             
+      JJ: "Adjective",               
+      JJR: "Adjective, comparative", 
+      JJS: "Adjective, superlative",  
+      LS: "List item marker",        
+      MD: "Modal",              
+      NN: "Noun, singular",     
+      NNP: "Proper noun, singular",     
+      NNPS: "Proper noun, plural",   
+      NNS: "Noun, plural",           
+      PDT: "Predeterminer",           
+      POS: "Possessive ending",       
+      PRP: "Personal pronoun",         
+      PRP$: "Possessive pronoun",     
+      RB:"Adverb",                   
+      RBR:"Adverb, comparative",    
+      RBS:"Adverb, superlative",  
+      RP: "Particle",                
+      SYM:"Symbol",  
+      TO:"To",                  
+      UH:"Interjection",           
+      VB:"Verb, base form",       
+      VBD: "Verb, past tense",      
+      VBG: "Verb, gerund",           
+      VBN: "Verb, past participle",
+      VBP: "Verb, present", 
+      VBZ: "Verb, present",   
+      WDT: "Wh-determiner", 
+      WP: "Wh pronoun", 
+      WP$: "Possessive-Wh",   
+      WRB: "Wh-adverb",   
+    }; 
     </script>
     <script>
       function copyText() {
