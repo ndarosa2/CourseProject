@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
-  <script src="compromise.js"></script>
+    <!-- source of compromise minimal library https://unpkg.com/browse/compromise@13.11.4/builds/compromise.min.js
+         github of project https://github.com/spencermountain/compromise
+    -->
+   
+  <script src="compromise.min.js"></script>
   
   <!-- source of compendium library https://github.com/Ulflander/compendium-js-->
   <script src="compendium.minimal.js"></script>  
@@ -51,8 +55,23 @@
         console.log(tags_array);
         
         createTable(tokens_array,tags_array); 
+      // https://observablehq.com/@spencermountain/topics-named-entity-recognition
+        var arr = nlp(text_replaced).organizations();
+        console.log("compromise test")
+        console.log(arr.list);
+        var topics_object = nlp(text_replaced).topics().list;
+        for (var i =0; i < topics_object.length ; i++){
+          var topics_terms = topics_object[i].cache.terms;
+          var topic = topics_terms[0].text;
+            for (var j=1; j < topics_terms.length ; j++){
+              topic = topic +" "+ topics_terms[j].text;
+            }                                               
+          console.log(topic);                            
+        } 
+        //console.log(arr.list);
       
       }
+      
       function createTable(tokens_array,tags_array){ // implementation based on https://www.itgeared.com/how-to-create-dynamic-html-table-javascript/
 
          //var div1 = document.getElementById('div1');
