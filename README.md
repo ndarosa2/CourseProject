@@ -1,3 +1,3 @@
 # CourseProject
 
-Natural Language Processing Extension for Firefox by Nicholas DaRosa (ndarosa2)
+Natural Language Processing Extension for Firefox and Chrome by Nicholas DaRosa (ndarosa2)
