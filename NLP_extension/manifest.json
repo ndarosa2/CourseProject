@@ -1,0 +1,26 @@
+{
+  "manifest_version": 2,
+  "name": "NLP",
+  "version": "1.0",
+
+  "description": "Allows user to copy and paste text in a popup window. The text is then analyzed for its sentiment (positive vs negaive), present entities (e.g. University of Illinois), and the text is broken up into token with each token's stem and part of speech. Implementation based on Firefox popup extension example https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Examples#beastify",
+  "homepage_url": "https://github.com/ndarosa2/CourseProject",
+  "icons": {
+    "48": "icons/NLP-48.png"
+  },
+
+  "permissions": [
+    "activeTab"
+  ],
+
+  "browser_action": {
+    "default_icon": "icons/NLP-32.png",
+    "default_title": "NLP",
+    "default_popup": "popup/NLP.html"
+  },
+
+  "web_accessible_resources": [
+
+  ]
+}
+

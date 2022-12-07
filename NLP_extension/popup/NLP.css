@@ -1,0 +1,43 @@
+ body {
+     background-color: black;
+     color: white;
+     max-width: max-content;
+     font-family: Phantomsans, sans-serif;
+     font-size: 16px;
+     margin: auto 
+}
+ select {
+     background-color: black;
+     color: white;
+     border: 2px solid grey;
+     font-family: Phantomsans, sans-serif;
+     font-size: 16px;
+}
+ input {
+     background-color: black;
+     color: white;
+     border: 2px solid grey;
+     font-family: Phantomsans, sans-serif;
+     font-size: 16px;
+}
+ textarea {
+     background-color: black;
+     color: white;
+     border: 2px solid grey;
+     font-family: Phantomsans, sans-serif;
+     font-size: 16px;
+}
+ button {
+     background-color: #006400;
+     border-radius: 8px;
+     background-image: linear-gradient(144deg,#AF40FF, #5B42F3 50%,#00DDEB);
+     border: none;
+     color: white;
+     padding: 8px 12px;
+     text-align: center;
+     text-decoration: none;
+     display: inline-block;
+     font-size: 16px;
+     margin: 4px 2px;
+     cursor: pointer;
+}

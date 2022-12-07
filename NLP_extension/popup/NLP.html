@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <title>Text NLP Analysis</title>
+    <head>
+        <title>Text NLP Analysis</title>
+        <link rel="stylesheet" href="NLP.css" />
+    </head>
+    <body>
+        <h3>Text NLP Analysis</h3>
+        Paste copied text into box below (max of 500 characters)
+        <br />
+        <textarea name="text" id= "text_input" name ="value_input" cols="65" rows="6" maxlength="500"></textarea>
+        <br />
+        <p id="sentiment_score_label" ><b>Sentiment Score: </b> </p>
+        <p><b>Entity Recognition</b></p>
+        <p id="people" >People: </p>
+        <p id="places" >Places: </p>
+        <p id="organizations" >Organizations: </p>
+        <br />
+        <table id="token_table">
+            <tr>
+                <th>Token</th>
+                <th>Stem</th>
+                <th>Part of Speech</th>
+            </tr>
+        </table>
+
+        <!-- source of compromise minimal library https://unpkg.com/browse/compromise@13.11.4/builds/compromise.min.js
+            github of project https://github.com/spencermountain/compromise-->
+        <script src="compromise.min.js"></script>
+        <!-- source of compendium library https://github.com/Ulflander/compendium-js-->
+        <script src="compendium.minimal.js"></script> 
+        <script src="NLP.js"></script>
+    </body>
+</html>
