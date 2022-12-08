@@ -68,7 +68,7 @@ function analyseText() {
 }
 
 function getEntities(type, input_text) {
-    var entities_string = "";
+
     if (type == "places") {
         entities_object = nlp(input_text).places().list;
 
@@ -80,20 +80,24 @@ function getEntities(type, input_text) {
     } else {
         entities_object = nlp(input_text).topics().list;
     }
-    //const entities_array = [];
+    const entity_array = [];
     for (var i = 0; i < entities_object.length; i++) {
         var entities_terms = entities_object[i].cache.terms;
         var entity = entities_terms[0].text;
         for (var j = 1; j < entities_terms.length; j++) {
             entity = entity + " " + entities_terms[j].text;
         }
-
-        if (i == 0) {
-            entities_string = entity;
-        } else {
-            entities_string = entities_string + ", " + entity;
-        }
+        entity_array[i] = entity;
     }
+    var entity_array_unique = [...new Set(entity_array)];
+    var entities_string = "";
+    for (var i = 0; i < entity_array_unique.length; i++) {
+        if (i == 0) {
+            entities_string = entity_array_unique[i];
+        } else {
+            entities_string = entities_string + ", " + entity_array_unique[i];
+        }
+    }    
     return entities_string;
 }
 
