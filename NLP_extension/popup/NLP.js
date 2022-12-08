@@ -38,16 +38,11 @@ const POS_object = {
     WRB: "Wh-adverb",
 };
 
-
 function analyseText() {
-    //const text_analysed_array = compendium.analyse('Nick is having a bad day. I hate oreos');
     const text = document.getElementById("text_input").value;
-    console.log("how are things going");
     if (text != ""){
         const text_replaced = text.replaceAll(/[?!.(),\[\]#-:;]/g, " ");
         // analyse the text but dont process for numeric and negation functions. 
-        //const text_analysed_array = compendium.analyse(document.getElementById("text_input").value, null, ['numeric','negation']);
-        // const text_analysed_array = compendium.analyse(text_replaced, null, ['numeric', 'negation']);
         const text_analysed_array = compendium.analyse(text_replaced, null, ['numeric', 'negation']);
         const tags_array = text_analysed_array[0].tags;
         const tokens_array = text_analysed_array[0].tokens;
@@ -101,11 +96,7 @@ function getEntities(type, input_text) {
     return entities_string;
 }
 
-
-
 function createTable(tokens_array, tags_array) { // implementation based on https://www.itgeared.com/how-to-create-dynamic-html-table-javascript/
-
-    //var div1 = document.getElementById('div1');
 
     var tbl = document.getElementById("token_table");
     tbl.innerHTML = "";
@@ -145,10 +136,5 @@ function createTable(tokens_array, tags_array) { // implementation based on http
     }
 }
 
-//document.getElementById("text_input").addEventListener("input", clickDemo);
 document.getElementById("text_input").addEventListener("input", analyseText);
-//document.getElementById("text_input").oninput = analyseText;
-//function clickDemo(){
-//console.log("Hi there")
-//}
 
