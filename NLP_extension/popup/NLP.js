@@ -41,7 +41,7 @@ const POS_object = {
 function analyseText() {
     const text = document.getElementById("text_input").value;
     if (text != ""){
-        const text_replaced = text.replaceAll(/[?!.(),\[\]#-:;]/g, " ");
+        const text_replaced = text.replaceAll(/[?!.(),\[\]#-:;]/g, "");
         // analyse the text but dont process for numeric and negation functions. 
         const text_analysed_array = compendium.analyse(text_replaced, null, ['numeric', 'negation']);
         const tags_array = text_analysed_array[0].tags;
